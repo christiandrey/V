@@ -1,0 +1,1424 @@
+﻿<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
+    xmlns:local="clr-namespace:GasRes_Cal"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="MainWindow"
+    Title="GasRes-Cal" Height="768" Width="1366" WindowState="Maximized">
+    <Window.Resources>
+        <Storyboard x:Key="blinkanim" x:Name="blinkstory">
+            <ColorAnimation Storyboard.TargetName="errorlabel"
+                            Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)"
+                            From="#FFEA3838"
+                            To="#FFF5F5F5"
+                            Duration="0:0:0.1"
+                            AutoReverse="True"
+                            RepeatBehavior="3x">
+            </ColorAnimation>
+        </Storyboard>
+        <Storyboard x:Key="blinkanim2" x:Name="blinkstory2">
+            <ColorAnimation Storyboard.TargetName="footererrorlabel"
+                            Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)"
+                            From="#FFEA3838"
+                            To="#FFF5F5F5"
+                            Duration="0:0:0.1"
+                            AutoReverse="True"
+                            RepeatBehavior="3x">
+            </ColorAnimation>
+        </Storyboard>
+        <Storyboard x:Key="blinkanim3" x:Name="blinkstory3">
+            <ColorAnimation Storyboard.TargetName="statuslabel"
+                            Storyboard.TargetProperty="(Label.Background).(SolidColorBrush.Color)"
+                            From="#FF404040"
+                            To="#FFF5F5F5"
+                            Duration="0:0:0.1"
+                            AutoReverse="True"
+                            RepeatBehavior="3x">
+            </ColorAnimation>
+        </Storyboard>
+    </Window.Resources>
+    <Grid Background="#FF252424">
+        <Grid x:Name="introgrid" Margin="0" d:IsHidden="True">
+            <Grid.Background>
+                <ImageBrush ImageSource="BgImage.jpg" Stretch="UniformToFill"/>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="400"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="600"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="introgridsub" Grid.Column="1" Margin="0" Grid.Row="1" Background="White">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Grid x:Name="introheader" Margin="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="10"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFFEC231" Offset="0"/>
+                            <GradientStop Color="#FFFE8E31" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Grid.Background>
+                    <Image x:Name="grcimg" Grid.Column="1" Margin="0" Source="Icon.png"/>
+                    <Image x:Name="grcimg_Copy" Grid.Column="3" Source="MBD-Black.png" Width="60" Height="60"/>
+                    <Label Content="GasRes-Cal 2015" Grid.Column="2" Margin="0" Padding="0" VerticalContentAlignment="Center" FontSize="23" Foreground="White">
+                        <Label.Effect>
+                            <DropShadowEffect Direction="340" Opacity="0.1" ShadowDepth="2" BlurRadius="1"/>
+                        </Label.Effect>
+                    </Label>
+                </Grid>
+                <Grid x:Name="introcontent" Margin="0" Grid.Row="1" Background="WhiteSmoke">
+                    <Grid x:Name="contentwrap" Margin="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label Content="Tasks" Margin="0" Padding="30,0,0,0" VerticalContentAlignment="Center" FontFamily="Segoe WP Semibold" FontSize="20" Foreground="#FF629FF7"/>
+                        <Grid x:Name="contentgrid2" Margin="0" Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="0.6*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Margin="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"/>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Rectangle x:Name="vol_bg" Grid.Column="2" Fill="#FFB0B0B0" Margin="0" Stroke="Black" StrokeThickness="0" Visibility="Hidden"/>
+                                <Rectangle x:Name="wwi_bg" Grid.Column="2" Fill="#FFB0B0B0" Stroke="Black" Grid.Row="2" StrokeThickness="0" Margin="0,1,0,109" Height="30" Visibility="Hidden"/>
+                                <Rectangle x:Name="wow_bg" Grid.Column="2" Fill="#FFB0B0B0" Stroke="Black" Grid.Row="2" StrokeThickness="0" Margin="0,30,0,80" Height="30" Visibility="Hidden"/>
+                                <Image x:Name="volimg" Grid.Column="1" Margin="0" Source="Vol.png"/>
+                                <Label x:Name="vm_btn" Content="Volumetric Method" Grid.Column="2" Margin="0" FontFamily="Segoe UI Semibold" Foreground="#FF515151" VerticalContentAlignment="Center" FontSize="15" Padding="10,0,0,0" Cursor="Hand" Background="#00F5F5F5">
+                                    <Label.Triggers>
+                                        <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="vm_btn"
+														Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+														From="#00F5F5F5"
+														To="#FFE0E0E0"
+														Duration="0:0:0.3"
+                                                                    />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="vm_btn"
+														Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+														From="#ffe0e0e0"
+														To="#00F5F5F5"
+														Duration="0:0:0.3"
+                                                                    />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                                <Image x:Name="volimg_Copy" Grid.Column="1" Grid.Row="1" Source="Mb.png"/>
+                                <Label x:Name="mb_btn" Content="Material Balance Method" Grid.Column="2" FontFamily="Segoe UI Semibold" Foreground="#FF515151" VerticalContentAlignment="Center" FontSize="15" Padding="10,0,0,0" Grid.Row="1" Cursor="Hand" Background="WhiteSmoke">
+                                    <Label.Triggers>
+                                        <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="mb_btn"
+														Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+														From="#00F5F5F5"
+														To="#FFE0E0E0"
+														Duration="0:0:0.3"
+                                                                    />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="mb_btn"
+														Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+														From="#ffe0e0e0"
+														To="#00F5F5F5"
+														Duration="0:0:0.3"
+                                                                    />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                                <Label x:Name="wwi_btn" Content="With water influx" Grid.Column="2" FontFamily="Segoe UI Semibold" Foreground="#FF616161" VerticalContentAlignment="Center" Padding="40,0,0,0" Grid.Row="2" Cursor="Hand" Margin="0,0,0,110" Height="30" Background="#00F5F5F5" Visibility="Hidden">
+                                    <Label.Triggers>
+                                        <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="wwi_btn"
+														Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+														From="#00F5F5F5"
+														To="#FFE0E0E0"
+														Duration="0:0:0.3"
+                                                                    />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="wwi_btn"
+														Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+														From="#ffe0e0e0"
+														To="#00F5F5F5"
+														Duration="0:0:0.3"
+                                                                    />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                                <Label x:Name="wow_btn" Content="Without water influx" Grid.Column="2" FontFamily="Segoe UI Semibold" Foreground="#FF616161" VerticalContentAlignment="Center" Padding="40,0,0,0" Grid.Row="2" Cursor="Hand" Margin="0,30,0,80" Height="30" Background="#00F5F5F5" Visibility="Hidden">
+                                    <Label.Triggers>
+                                        <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="wow_btn"
+														Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+														From="#00F5F5F5"
+														To="#FFE0E0E0"
+														Duration="0:0:0.3"
+                                                                    />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                        <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <ColorAnimation Storyboard.TargetName="wow_btn"
+														Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+														From="#ffe0e0e0"
+														To="#00F5F5F5"
+														Duration="0:0:0.3"
+                                                                    />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </EventTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </Grid>
+                            <Label x:Name="begincalc" Content="Begin Calculation" Grid.Column="1" HorizontalAlignment="Center" Margin="49,94,50,94" VerticalAlignment="Center" Width="126" Height="32" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF629FF7" Foreground="White" Cursor="Hand">
+                                <Label.Triggers>
+                                    <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation Storyboard.TargetName="begincalc"
+													Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+													From="#FF629FF7"
+													To="#FF457CCD"
+													Duration="0:0:0.3"
+                                                                    />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                    <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation Storyboard.TargetName="begincalc"
+													Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+													From="#457CCD"
+													To="#FF629FF7"
+													Duration="0:0:0.3"
+                                                                    />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Label.Triggers>
+                            </Label>
+                            <Rectangle Grid.Column="1" HorizontalAlignment="Left" Margin="0" Stroke="#FFCFCFCF" Width="1"/>
+                        </Grid>
+                    </Grid>
+                    <Label x:Name="errorlabel" Content="Error: Please select a task!!!" Margin="0" VerticalAlignment="Bottom" Height="30" Background="#FFEA3838" Foreground="White" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Visibility="Hidden"/>
+                </Grid>
+                <Rectangle Margin="0" Grid.Row="2" Fill="White" Stroke="#FFCFCFCF" VerticalAlignment="Top" Height="1"/>
+                <Label Content="© Umeokeke Chiemelie Paul, 158334, 2015" Margin="0" Grid.Row="2" Padding="20,0,0,0" VerticalContentAlignment="Center"/>
+            </Grid>
+        </Grid>
+        <Grid x:Name="softgrid" Margin="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="44"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid x:Name="softgridheader" Margin="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                        <GradientStop Color="#FFFE8E31" Offset="1"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+                <Label x:Name="calmethod" Content="The Volumetric Method" Grid.Column="2" Margin="0" Padding="20,0,0,0" VerticalContentAlignment="Center" FontSize="35" Foreground="White">
+                    <Label.Effect>
+                        <DropShadowEffect Direction="340" Opacity="0.1" ShadowDepth="2" BlurRadius="1"/>
+                    </Label.Effect>
+                </Label>
+                <Image Grid.Column="1" Margin="0" Source="Icon.png" Width="80"/>
+                <Image Grid.Column="3" Width="80" Source="MBD-Black.png"/>
+            </Grid>
+            <Grid x:Name="footer" Margin="0" Grid.Row="1" Background="WhiteSmoke">
+                <Label x:Name="footererrorlabel" Content="Error:" Margin="0" Padding="20,0,0,0" VerticalContentAlignment="Center" Background="#FFEA3838" Foreground="White" Visibility="Hidden">
+                </Label>
+                <Label x:Name="statuslabel" Content="Error:" Margin="0" Padding="20,0,0,0" VerticalContentAlignment="Center" Background="#FF404040" Foreground="White" Visibility="Hidden"/>
+                <Label x:Name="homebtn" Content="Go Home" HorizontalAlignment="Right" Margin="0,0,5,0" VerticalAlignment="Center" Width="126" Height="32" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF629FF7" Foreground="White" Cursor="Hand">
+                    <Label.Triggers>
+                        <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation Storyboard.TargetName="homebtn"
+													Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+													From="#FF629FF7"
+													To="#FF457CCD"
+													Duration="0:0:0.3"
+                                                                    />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation Storyboard.TargetName="homebtn"
+													Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+													From="#457CCD"
+													To="#FF629FF7"
+													Duration="0:0:0.3"
+                                                                    />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                    </Label.Triggers>
+                </Label>
+                <Rectangle Fill="#FFB0B0B0" Margin="0" Stroke="Black" StrokeThickness="0" Height="1" VerticalAlignment="Bottom"/>
+            </Grid>
+            <Grid x:Name="volumegrid" Margin="0" Grid.Row="2" Visibility="Hidden">
+                <Grid x:Name="volumegridwrap" Margin="0" Visibility="Visible">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="400"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid x:Name="volumedi" Margin="0" Background="White">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="0.1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="450"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid x:Name="voldatainholder" Grid.Column="1" Margin="0" Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="35"/>
+                            </Grid.RowDefinitions>
+                            <Label x:Name="voldatalabel" Content="Area of Reservoir (Acres)" Margin="0" Grid.ColumnSpan="3" VerticalContentAlignment="Bottom" FontSize="16" Padding="5,0,5,3"/>
+                            <Label x:Name="voldatalabel_Copy" Content="Porosity (%)" Grid.ColumnSpan="3" VerticalContentAlignment="Bottom" FontSize="16" Padding="5,0,5,3" Grid.Row="3"/>
+                            <Label x:Name="voldatalabel_Copy1" Content="Bgi (cuft/scf)" Grid.ColumnSpan="3" VerticalContentAlignment="Bottom" FontSize="16" Padding="5,0,5,3" Grid.Row="6"/>
+                            <Label x:Name="voldatalabel_Copy2" Content="Height of Reservoir (ft)" Grid.ColumnSpan="3" VerticalContentAlignment="Bottom" FontSize="16" Padding="5,0,5,3" Grid.Column="4"/>
+                            <Label x:Name="voldatalabel_Copy3" Content="Initial water saturation" Grid.ColumnSpan="3" VerticalContentAlignment="Bottom" FontSize="16" Padding="5,0,5,3" Grid.Row="3" Grid.Column="4"/>
+                            <Label x:Name="voldatalabel_Copy4" Content="Bga (cuft/scf)" Grid.ColumnSpan="3" VerticalContentAlignment="Bottom" FontSize="16" Padding="5,0,5,3" Grid.Row="6" Grid.Column="4"/>
+                            <Image x:Name="voldataimg" HorizontalAlignment="Left" Margin="0" Grid.Row="1" Width="35" Source="Area.png" VerticalAlignment="Center"/>
+                            <TextBox x:Name="A" Grid.ColumnSpan="3" Grid.Row="1" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke"/>
+                            <Image x:Name="voldataimg_Copy" HorizontalAlignment="Left" Grid.Row="1" Width="35" Source="Height.png" VerticalAlignment="Center" Grid.Column="4"/>
+                            <TextBox x:Name="H" Grid.ColumnSpan="3" Grid.Row="1" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4"/>
+                            <Image x:Name="voldataimg_Copy1" HorizontalAlignment="Left" Grid.Row="4" Width="35" Source="Porosity.png" VerticalAlignment="Center"/>
+                            <TextBox x:Name="Phi" Grid.ColumnSpan="3" Grid.Row="4" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke"/>
+                            <Image x:Name="voldataimg_Copy2" HorizontalAlignment="Left" Grid.Row="4" Width="35" Source="Saturation.png" VerticalAlignment="Center" Grid.Column="4"/>
+                            <TextBox x:Name="Swi" Grid.ColumnSpan="3" Grid.Row="4" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4"/>
+                            <Image x:Name="voldataimg_Copy35" HorizontalAlignment="Left" Grid.Row="9" Width="35" Source="z.png" VerticalAlignment="Center" Visibility="Hidden"/>
+                            <TextBox x:Name="z" Grid.ColumnSpan="3" Grid.Row="9" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy36" HorizontalAlignment="Left" Grid.Row="9" Width="35" Source="z.png" VerticalAlignment="Center" Grid.Column="4" Visibility="Hidden"/>
+                            <TextBox x:Name="zb" Grid.ColumnSpan="3" Grid.Row="9" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy3" HorizontalAlignment="Left" Grid.Row="9" Width="35" Source="gg.png" VerticalAlignment="Center" Visibility="Hidden"/>
+                            <TextBox x:Name="gg" Grid.ColumnSpan="3" Grid.Row="9" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy4" HorizontalAlignment="Left" Grid.Row="9" Width="35" Source="gg.png" VerticalAlignment="Center" Grid.Column="4" Visibility="Hidden"/>
+                            <TextBox x:Name="ggb" Grid.ColumnSpan="3" Grid.Row="9" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy5" HorizontalAlignment="Left" Grid.Row="11" Width="35" Source="Temperature.png" VerticalAlignment="Center" Visibility="Hidden"/>
+                            <TextBox x:Name="T" Grid.ColumnSpan="3" Grid.Row="11" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy6" HorizontalAlignment="Left" Grid.Row="11" Width="35" Source="Temperature.png" VerticalAlignment="Center" Grid.Column="4" Visibility="Hidden"/>
+                            <TextBox x:Name="Tb" Grid.ColumnSpan="3" Grid.Row="11" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy7" HorizontalAlignment="Left" Grid.Row="13" Width="35" Source="Pressure.png" VerticalAlignment="Center" Visibility="Hidden"/>
+                            <TextBox x:Name="P" Grid.ColumnSpan="3" Grid.Row="13" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy8" HorizontalAlignment="Left" Grid.Row="13" Width="35" Source="Pressure.png" VerticalAlignment="Center" Grid.Column="4" Visibility="Hidden"/>
+                            <TextBox x:Name="Pb" Grid.ColumnSpan="3" Grid.Row="13" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4" Visibility="Hidden"/>
+                            <Label x:Name="bgiinputbtn" Content="Input value" Margin="0" Grid.Row="7" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" FontSize="14" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                        <GradientStop Color="#FFFE8E31" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="bgicalcbtn" Content="Calculate value" Grid.Row="7" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" FontSize="14" Grid.Column="2" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF5F5F5F" Offset="0"/>
+                                        <GradientStop Color="#FF252424" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="bgainputbtn" Content="Input value" Grid.Row="7" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" FontSize="14" Grid.Column="4" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                        <GradientStop Color="#FFFE8E31" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="bgacalcbtn" Content="Calculate value" Grid.Row="7" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" FontSize="14" Grid.Column="6" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF5F5F5F" Offset="0"/>
+                                        <GradientStop Color="#FF252424" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Image x:Name="voldataimg_Copy27" HorizontalAlignment="Left" Grid.Row="9" Width="35" Source="Bgi.png" VerticalAlignment="Center" Visibility="Hidden"/>
+                            <TextBox x:Name="Bgiin" Grid.ColumnSpan="3" Grid.Row="9" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy28" HorizontalAlignment="Left" Grid.Row="9" Width="35" Source="Bga.png" VerticalAlignment="Center" Grid.Column="4" Visibility="Hidden"/>
+                            <TextBox x:Name="Bgain" Grid.ColumnSpan="3" Grid.Row="9" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4" Visibility="Hidden"/>
+                            <Label x:Name="zbgicalcbtn" Content="Input Z" Grid.Row="9" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" Grid.Column="2" Width="60" HorizontalAlignment="Left" Visibility="Hidden" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF5F5F5F" Offset="0"/>
+                                        <GradientStop Color="#FF252424" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="ubgicalcbtn" Content="Input ɣ" Grid.Row="9" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" Grid.Column="2" Width="60" HorizontalAlignment="Right" Margin="0" Visibility="Hidden" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                        <GradientStop Color="#FFFE8E31" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="zbgacalcbtn" Content="Input Z" Grid.Row="9" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" Grid.Column="6" Width="60" HorizontalAlignment="Left" Visibility="Hidden" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF5F5F5F" Offset="0"/>
+                                        <GradientStop Color="#FF252424" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="ubgacalcbtn" Content="Input ɣ" Grid.Row="9" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" Grid.Column="6" Width="60" HorizontalAlignment="Right" Visibility="Hidden" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                        <GradientStop Color="#FFFE8E31" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                        </Grid>
+                        <Label x:Name="chart1btn" Content="Charts &amp; Table" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Width="126" Height="32" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF629FF7" Foreground="White" Cursor="Hand" Grid.Column="1" Grid.Row="2">
+                            <Label.Triggers>
+                                <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="chart1btn"
+													Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+													From="#FF629FF7"
+													To="#FF457CCD"
+													Duration="0:0:0.3"
+                                                                    />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="chart1btn"
+													Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+													From="#457CCD"
+													To="#FF629FF7"
+													Duration="0:0:0.3"
+                                                                    />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Label.Triggers>
+                        </Label>
+                    </Grid>
+                    <Grid x:Name="volumeresults" Grid.Column="1" Margin="0" Width="300" Height="450" Background="#FF515151">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="7"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="7"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="7"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="7"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="7"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="7"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="7"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="7"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="7"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.Effect>
+                            <DropShadowEffect ShadowDepth="2" Opacity="0.5" BlurRadius="7"/>
+                        </Grid.Effect>
+                        <Label Content="Gas Initially in place, G" Grid.Column="1" Margin="0" Grid.Row="1" Grid.ColumnSpan="3" Background="#FF2E2E2E" Foreground="White" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
+                        <Label Content="Gas produced, Gp" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3" Background="#FF2E2E2E" Foreground="White" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
+                        <Label x:Name="g_calc" Content="00000000 SCF" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" Background="#FFFEC231" Foreground="#FF252424" FontSize="18" Margin="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0"/>
+                        <Label x:Name="gp_calc" Content="00000000 SCF" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" Background="#FFFEC231" Foreground="#FF252424" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0"/>
+                        <Label Content="R.F. " Grid.Column="1" Grid.Row="7" Background="#FF2E2E2E" Foreground="White" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center" Margin="0" VerticalAlignment="Center" Height="35"/>
+                        <Label Content="Bgi" Grid.Column="1" Grid.Row="9" Background="#FF2E2E2E" Foreground="White" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center" Margin="0" VerticalAlignment="Center" Height="35"/>
+                        <Label Content="Bga" Grid.Column="1" Grid.Row="11" Background="#FF2E2E2E" Foreground="White" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center" Margin="0" VerticalAlignment="Center" Height="35"/>
+                        <Label x:Name="rf_calc" Content="0%" Grid.Column="3" Grid.Row="7" Background="#FFFEC231" Foreground="#FF252424" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center" Margin="0" VerticalAlignment="Center" Height="35"/>
+                        <Label x:Name="bgi_calc" Content="0 cuft/scf" Grid.Column="3" Grid.Row="9" Background="#FFFEC231" Foreground="#FF252424" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center" Margin="0" VerticalAlignment="Center" Height="34"/>
+                        <Label x:Name="bga_calc" Content="0 cuft/scf" Grid.Column="3" Grid.Row="11" Background="#FFFEC231" Foreground="#FF252424" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center" Margin="0" VerticalAlignment="Center" Height="34"/>
+                    </Grid>
+                </Grid>
+                <Grid x:Name="volumegridcharts" Margin="0" d:IsHidden="True" Visibility="Hidden">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="450"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid x:Name="chartwrapper1" Grid.Column="1" Margin="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid x:Name="chartholder1" Margin="0,1,0,0">
+                            <d3:ChartPlotter x:Name="myChartPlotter1">
+                                <d3:Header Content="Gas FVF vs Pressure"/>
+                                <d3:VerticalAxisTitle Content="Gas FVF, Bg (cuft/scf)"/>
+                                <d3:HorizontalAxisTitle Content="Pressure, P (psia)"/>
+                                <d3:CursorCoordinateGraph x:Name="CursorGraph1"/>
+                                <d3:AxisCursorGraph/>
+                            </d3:ChartPlotter>
+                        </Grid>
+                        <Grid x:Name="chartholder1b" Grid.Row="2">
+                            <d3:ChartPlotter x:Name="myChartPlotter2">
+                                <d3:Header Content="Pressure vs Gas produced"/>
+                                <d3:VerticalAxisTitle Content="Pressure, P (psia)"/>
+                                <d3:HorizontalAxisTitle Content="Gas Produced, Gp (SCF)"/>
+                                <d3:CursorCoordinateGraph x:Name="CursorGraph2"/>
+                                <d3:AxisCursorGraph/>
+                            </d3:ChartPlotter>
+                        </Grid>
+                    </Grid>
+                    <Grid x:Name="table1wrap" Margin="0" Background="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="44"/>
+                        </Grid.RowDefinitions>
+                        <DataGrid x:Name="voltable" Margin="0" AutoGenerateColumns="False" RowHeight="35">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn x:Name="colpressure" Binding="{x:Null}" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="Pressure, P" Width="*">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="Foreground" Value="#FF252424"/>
+                                            <Setter Property="Height" Value="40"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                            <Setter Property="Padding" Value="5,0,0,0"/>
+                                            <Setter Property="BorderThickness" Value="1,0"/>
+                                            <Setter Property="BorderBrush" Value="#FF959595"/>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                                        <GradientStop Color="#FFFE8231" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn x:Name="colcompress" Binding="{x:Null}" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="Gas FVF. Bg (cuft/scf)" Width="*">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="Foreground" Value="#FF252424"/>
+                                            <Setter Property="Height" Value="40"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                            <Setter Property="Padding" Value="5,0,0,0"/>
+                                            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                            <Setter Property="BorderBrush" Value="#FF959595"/>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                                        <GradientStop Color="#FFFE8231" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn x:Name="colgiip" Binding="{x:Null}" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="Gas initially in place, G" Width="*">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="Foreground" Value="#FF252424"/>
+                                            <Setter Property="Height" Value="40"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                            <Setter Property="Padding" Value="5,0,0,0"/>
+                                            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                            <Setter Property="BorderBrush" Value="#FF959595"/>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                                        <GradientStop Color="#FFFE8231" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn x:Name="colgprod" Binding="{x:Null}" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="Gas produced, Gp" Width="*">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="Foreground" Value="#FF252424"/>
+                                            <Setter Property="Height" Value="40"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                            <Setter Property="Padding" Value="5,0,0,0"/>
+                                            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                            <Setter Property="BorderBrush" Value="#FF959595"/>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                                        <GradientStop Color="#FFFE8231" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn x:Name="colrecovery" Binding="{x:Null}" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="Recovery factor" Width="*">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="Foreground" Value="#FF252424"/>
+                                            <Setter Property="Height" Value="40"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                            <Setter Property="Padding" Value="5,0,0,0"/>
+                                            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                            <Setter Property="BorderBrush" Value="#FF959595"/>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                                        <GradientStop Color="#FFFE8231" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Label x:Name="datainbtn" Content="Data input" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Width="126" Height="32" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF629FF7" Foreground="White" Cursor="Hand" Grid.Row="1">
+                            <Label.Triggers>
+                                <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="datainbtn"
+													Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+													From="#FF629FF7"
+													To="#FF457CCD"
+													Duration="0:0:0.3"
+                                                                    />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="datainbtn"
+													Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+													From="#457CCD"
+													To="#FF629FF7"
+													Duration="0:0:0.3"
+                                                                    />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Label.Triggers>
+                        </Label>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid x:Name="wwigrid" Margin="0" Grid.Row="2" Visibility="Hidden">
+                <Grid x:Name="wwigridwrap" Margin="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="400"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid x:Name="wwidi" Margin="0" Background="White">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="0.1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="450"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid x:Name="wwidatainholder" Grid.Column="1" Margin="0" Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="35"/>
+                            </Grid.RowDefinitions>
+                            <Label x:Name="voldatalabel1" Content="Gas Produced (SCF)" Margin="0" Grid.ColumnSpan="3" VerticalContentAlignment="Bottom" FontSize="16" Padding="5,0,5,3"/>
+                            <Label x:Name="voldatalabel_Copy5" Content="Porosity (%)" VerticalContentAlignment="Bottom" FontSize="16" Padding="5,0,5,3" Grid.Row="3"/>
+                            <Label x:Name="voldatalabel_Copy6" Content="Bg (cuft/scf)" Grid.ColumnSpan="3" VerticalContentAlignment="Bottom" FontSize="16" Padding="5,0,5,3" Grid.Row="6"/>
+                            <Label x:Name="voldatalabel_Copy7" Content="Height of reservoir (ft)" Grid.ColumnSpan="3" VerticalContentAlignment="Bottom" FontSize="16" Padding="5,0,5,3" Grid.Column="4"/>
+                            <Label x:Name="voldatalabel_Copy8" Content="Initial water saturation" Grid.ColumnSpan="3" VerticalContentAlignment="Bottom" FontSize="16" Padding="5,0,5,3" Grid.Row="3" Grid.Column="4"/>
+                            <Label x:Name="voldatalabel_Copy9" Content="Bgi (cuft/scf)" Grid.ColumnSpan="3" VerticalContentAlignment="Bottom" FontSize="16" Padding="5,0,5,3" Grid.Row="6" Grid.Column="4"/>
+                            <Image x:Name="voldataimg1" HorizontalAlignment="Left" Margin="0" Grid.Row="1" Width="35" Source="Gp.png" VerticalAlignment="Center"/>
+                            <TextBox x:Name="GP" Grid.ColumnSpan="3" Grid.Row="1" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke"/>
+                            <Image x:Name="voldataimg_Copy9" HorizontalAlignment="Left" Grid.Row="1" Width="35" Source="Height.png" VerticalAlignment="Center" Grid.Column="4"/>
+                            <TextBox x:Name="Bw" Grid.ColumnSpan="3" Grid.Row="1" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4"/>
+                            <Image x:Name="voldataimg_Copy10" HorizontalAlignment="Left" Grid.Row="4" Width="35" Source="Porosity.png" VerticalAlignment="Center"/>
+                            <TextBox x:Name="We" Grid.Row="4" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke"/>
+                            <Image x:Name="voldataimg_Copy11" HorizontalAlignment="Left" Grid.Row="4" Width="35" Source="Saturation.png" VerticalAlignment="Center" Grid.Column="4"/>
+                            <Image x:Name="voldataimg_Copy37" HorizontalAlignment="Left" Grid.Row="4" Width="35" Source="Area.png" VerticalAlignment="Center" Grid.Column="2"/>
+                            <TextBox x:Name="Ra" Grid.Row="4" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="2"/>
+                            <TextBox x:Name="Wp" Grid.ColumnSpan="3" Grid.Row="4" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4"/>
+                            <Image x:Name="voldataimg_Copy33" HorizontalAlignment="Left" Grid.Row="9" Width="35" Source="z.png" VerticalAlignment="Center" Visibility="Hidden"/>
+                            <TextBox x:Name="z1" Grid.ColumnSpan="3" Grid.Row="9" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy34" HorizontalAlignment="Left" Grid.Row="9" Width="35" Source="z.png" VerticalAlignment="Center" Grid.Column="4" Visibility="Hidden"/>
+                            <TextBox x:Name="zb1" Grid.ColumnSpan="3" Grid.Row="9" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy12" HorizontalAlignment="Left" Grid.Row="9" Width="35" Source="gg.png" VerticalAlignment="Center" Visibility="Hidden"/>
+                            <TextBox x:Name="gg1" Grid.ColumnSpan="3" Grid.Row="9" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy13" HorizontalAlignment="Left" Grid.Row="9" Width="35" Source="gg.png" VerticalAlignment="Center" Grid.Column="4" Visibility="Hidden"/>
+                            <TextBox x:Name="ggb1" Grid.ColumnSpan="3" Grid.Row="9" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy14" HorizontalAlignment="Left" Grid.Row="11" Width="35" Source="Temperature.png" VerticalAlignment="Center" Visibility="Hidden"/>
+                            <TextBox x:Name="T1" Grid.ColumnSpan="3" Grid.Row="11" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy15" HorizontalAlignment="Left" Grid.Row="11" Width="35" Source="Temperature.png" VerticalAlignment="Center" Grid.Column="4" Visibility="Hidden"/>
+                            <TextBox x:Name="Tb1" Grid.ColumnSpan="3" Grid.Row="11" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy16" HorizontalAlignment="Left" Grid.Row="13" Width="35" Source="Pressure.png" VerticalAlignment="Center" Visibility="Hidden"/>
+                            <TextBox x:Name="P1" Grid.ColumnSpan="3" Grid.Row="13" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy17" HorizontalAlignment="Left" Grid.Row="13" Width="35" Source="Pressure.png" VerticalAlignment="Center" Grid.Column="4" Visibility="Hidden"/>
+                            <TextBox x:Name="Pb1" Grid.ColumnSpan="3" Grid.Row="13" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4" Visibility="Hidden"/>
+                            <Label x:Name="bgiinputbtn1" Content="Input value" Margin="0" Grid.Row="7" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" FontSize="14" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                        <GradientStop Color="#FFFE8E31" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="bgicalcbtn1" Content="Calculate value" Grid.Row="7" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" FontSize="14" Grid.Column="2" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF5F5F5F" Offset="0"/>
+                                        <GradientStop Color="#FF252424" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="bgainputbtn1" Content="Input value" Grid.Row="7" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" FontSize="14" Grid.Column="4" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                        <GradientStop Color="#FFFE8E31" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="bgacalcbtn1" Content="Calculate value" Grid.Row="7" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" FontSize="14" Grid.Column="6" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF5F5F5F" Offset="0"/>
+                                        <GradientStop Color="#FF252424" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Image x:Name="voldataimg_Copy29" HorizontalAlignment="Left" Grid.Row="9" Width="35" Source="Bg.png" VerticalAlignment="Center" Visibility="Hidden"/>
+                            <TextBox x:Name="Bgiin1" Grid.ColumnSpan="3" Grid.Row="9" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy30" HorizontalAlignment="Left" Grid.Row="9" Width="35" Source="Bgi.png" VerticalAlignment="Center" Grid.Column="4" Visibility="Hidden"/>
+                            <TextBox x:Name="Bgain1" Grid.ColumnSpan="3" Grid.Row="9" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4" Visibility="Hidden"/>
+                            <Label x:Name="zbgicalcbtn1" Content="Input Z" Grid.Row="9" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" Grid.Column="2" Width="60" HorizontalAlignment="Left" Visibility="Hidden" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF5F5F5F" Offset="0"/>
+                                        <GradientStop Color="#FF252424" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="ubgicalcbtn1" Content="Input ɣ" Grid.Row="9" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" Grid.Column="2" Width="60" HorizontalAlignment="Right" Margin="0" Visibility="Hidden" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                        <GradientStop Color="#FFFE8E31" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="zbgacalcbtn1" Content="Input Z" Grid.Row="9" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" Grid.Column="6" Width="60" HorizontalAlignment="Left" Visibility="Hidden" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF5F5F5F" Offset="0"/>
+                                        <GradientStop Color="#FF252424" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="ubgacalcbtn1" Content="Input ɣ" Grid.Row="9" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" Grid.Column="6" Width="60" HorizontalAlignment="Right" Visibility="Hidden" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                        <GradientStop Color="#FFFE8E31" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="voldatalabel_Copy12" Content="Reservoir Area (Acres)" VerticalContentAlignment="Bottom" FontSize="16" Padding="5,0,5,3" Grid.Row="3" Grid.Column="2"/>
+                        </Grid>
+                        <Label x:Name="chart2btn" Content="Charts &amp; Table" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Width="126" Height="32" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF629FF7" Foreground="White" Cursor="Hand" Grid.Column="1" Grid.Row="2">
+                            <Label.Triggers>
+                                <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="chart2btn"
+                								Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+                								From="#FF629FF7"
+                								To="#FF457CCD"
+                								Duration="0:0:0.3"
+                                                                    />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="chart2btn"
+                								Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+                								From="#457CCD"
+                								To="#FF629FF7"
+                								Duration="0:0:0.3"
+                                                                    />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Label.Triggers>
+                        </Label>
+                    </Grid>
+                    <Grid x:Name="wwiresults" Grid.Column="1" Margin="50,72,50,71" Width="300" Height="450" Background="#FF515151">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="7"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="7"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="7"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="7"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="7"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="7"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="7"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="7"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="7"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.Effect>
+                            <DropShadowEffect ShadowDepth="2" Opacity="0.5" BlurRadius="7"/>
+                        </Grid.Effect>
+                        <Label Content="Gas Initially in place, G" Grid.Column="1" Margin="0" Grid.Row="1" Grid.ColumnSpan="3" Background="#FF2E2E2E" Foreground="White" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
+                        <Label Content="Gas produced, Gp" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3" Background="#FF2E2E2E" Foreground="White" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
+                        <Label x:Name="g_calc1" Content="00000000 SCF" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" Background="#FFFEC231" Foreground="#FF252424" FontSize="18" Margin="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0"/>
+                        <Label x:Name="gp_calc1" Content="00000000 SCF" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" Background="#FFFEC231" Foreground="#FF252424" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0"/>
+                        <Label Content="R.F. " Grid.Column="1" Grid.Row="7" Background="#FF2E2E2E" Foreground="White" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center" Margin="0" VerticalAlignment="Center" Height="35"/>
+                        <Label Content="Bg" Grid.Column="1" Grid.Row="9" Background="#FF2E2E2E" Foreground="White" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center" Margin="0" VerticalAlignment="Center" Height="35"/>
+                        <Label Content="Bgi" Grid.Column="1" Grid.Row="11" Background="#FF2E2E2E" Foreground="White" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center" Margin="0" VerticalAlignment="Center" Height="35"/>
+                        <Label x:Name="rf_calc1" Content="0%" Grid.Column="3" Grid.Row="7" Background="#FFFEC231" Foreground="#FF252424" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center" Margin="0" VerticalAlignment="Center" Height="35"/>
+                        <Label x:Name="bgi_calc1" Content="0 cuft/scf" Grid.Column="3" Grid.Row="9" Background="#FFFEC231" Foreground="#FF252424" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center" Margin="0" VerticalAlignment="Center" Height="34"/>
+                        <Label x:Name="bga_calc1" Content="0 cuft/scf" Grid.Column="3" Grid.Row="11" Background="#FFFEC231" Foreground="#FF252424" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center" Margin="0" VerticalAlignment="Center" Height="34"/>
+                    </Grid>
+                </Grid>
+                <Grid x:Name="wwigridcharts" Margin="0" Visibility="Hidden">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="500"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid x:Name="chartholder2" Margin="0">
+                        <d3:ChartPlotter x:Name="myChartPlotter3" Background="WhiteSmoke" BorderBrush="#FFB9B9B9">
+                            <d3:Header Content="P/z vs Gas produced"/>
+                            <d3:VerticalAxisTitle Content="P/z"/>
+                            <d3:HorizontalAxisTitle Content="Gp-We/Bg, (SCF)"/>
+                            <d3:CursorCoordinateGraph x:Name="CursorGraph3"/>
+                            <d3:AxisCursorGraph/>
+                        </d3:ChartPlotter>
+                    </Grid>
+                    <Grid x:Name="table2wrap" Margin="0" Background="White" Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="44"/>
+                        </Grid.RowDefinitions>
+                        <DataGrid x:Name="wwitable" Margin="0" AutoGenerateColumns="False" RowHeight="35">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn x:Name="colpressure1" Binding="{x:Null}" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="Pressure, P" Width="*">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="Foreground" Value="#FF252424"/>
+                                            <Setter Property="Height" Value="40"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                            <Setter Property="Padding" Value="5,0,0,0"/>
+                                            <Setter Property="BorderThickness" Value="1,0"/>
+                                            <Setter Property="BorderBrush" Value="#FF959595"/>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                                        <GradientStop Color="#FFFE8231" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn x:Name="colcompress1" Binding="{x:Null}" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="z" Width="*">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="Foreground" Value="#FF252424"/>
+                                            <Setter Property="Height" Value="40"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                            <Setter Property="Padding" Value="5,0,0,0"/>
+                                            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                            <Setter Property="BorderBrush" Value="#FF959595"/>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                                        <GradientStop Color="#FFFE8231" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn x:Name="colpoverz1" Binding="{x:Null}" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="P/z" Width="*">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="Foreground" Value="#FF252424"/>
+                                            <Setter Property="Height" Value="40"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                            <Setter Property="Padding" Value="5,0,0,0"/>
+                                            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                            <Setter Property="BorderBrush" Value="#FF959595"/>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                                        <GradientStop Color="#FFFE8231" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn x:Name="colgprod1" Binding="{x:Null}" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="We=GpBg-G(Bg-Bgi)" Width="*">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="Foreground" Value="#FF252424"/>
+                                            <Setter Property="Height" Value="40"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                            <Setter Property="Padding" Value="5,0,0,0"/>
+                                            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                            <Setter Property="BorderBrush" Value="#FF959595"/>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                                        <GradientStop Color="#FFFE8231" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn x:Name="colrecovery1" Binding="{x:Null}" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="Gp - We/Bg" Width="*">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="Foreground" Value="#FF252424"/>
+                                            <Setter Property="Height" Value="40"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                            <Setter Property="Padding" Value="5,0,0,0"/>
+                                            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                            <Setter Property="BorderBrush" Value="#FF959595"/>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                                        <GradientStop Color="#FFFE8231" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Label x:Name="datainbtn1" Content="Data input" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Width="126" Height="32" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF629FF7" Foreground="White" Cursor="Hand" Grid.Row="1">
+                            <Label.Triggers>
+                                <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="datainbtn1"
+													Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+													From="#FF629FF7"
+													To="#FF457CCD"
+													Duration="0:0:0.3"
+                                                                    />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="datainbtn1"
+													Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+													From="#457CCD"
+													To="#FF629FF7"
+													Duration="0:0:0.3"
+                                                                    />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Label.Triggers>
+                        </Label>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Grid x:Name="wowgrid" Margin="0" Grid.Row="2" Visibility="Hidden">
+                <Grid x:Name="wowgridwrap" Margin="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="400"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid x:Name="wowdi" Margin="0" Background="White">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.1*"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="0.1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="450"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid x:Name="wwidatainholder1" Grid.Column="1" Margin="0" Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition/>
+                                <RowDefinition Height="35"/>
+                            </Grid.RowDefinitions>
+                            <Label x:Name="voldatalabel_Copy10" Content="Gas Produced, SCF" Grid.ColumnSpan="3" VerticalContentAlignment="Bottom" FontSize="16" Padding="5,0,5,3"/>
+                            <Label x:Name="voldatalabel_Copy11" Content="Bg (cuft/scf)" Grid.ColumnSpan="3" VerticalContentAlignment="Bottom" FontSize="16" Padding="5,0,5,3" Grid.Row="3"/>
+                            <Label x:Name="voldatalabel_Copy14" Content="Bgi (cuft/scf)" Grid.ColumnSpan="3" VerticalContentAlignment="Bottom" FontSize="16" Padding="5,0,5,3" Grid.Row="3" Grid.Column="4"/>
+                            <Image x:Name="voldataimg_Copy19" HorizontalAlignment="Left" Grid.Row="1" Width="35" Source="Gp.png" VerticalAlignment="Center"/>
+                            <TextBox x:Name="Gp1" Grid.ColumnSpan="3" Grid.Row="1" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke"/>
+                            <Image x:Name="voldataimg_Copy31" HorizontalAlignment="Left" Grid.Row="6" Width="35" Source="z.png" VerticalAlignment="Center" Visibility="Hidden"/>
+                            <TextBox x:Name="z2" Grid.ColumnSpan="3" Grid.Row="6" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy32" HorizontalAlignment="Left" Grid.Row="6" Width="35" Source="z.png" VerticalAlignment="Center" Grid.Column="4" Visibility="Hidden"/>
+                            <TextBox x:Name="zb2" Grid.ColumnSpan="3" Grid.Row="6" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy21" HorizontalAlignment="Left" Grid.Row="6" Width="35" Source="gg.png" VerticalAlignment="Center" Visibility="Hidden"/>
+                            <TextBox x:Name="gg2" Grid.ColumnSpan="3" Grid.Row="6" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy22" HorizontalAlignment="Left" Grid.Row="6" Width="35" Source="gg.png" VerticalAlignment="Center" Grid.Column="4" Visibility="Hidden"/>
+                            <TextBox x:Name="ggb2" Grid.ColumnSpan="3" Grid.Row="6" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy23" HorizontalAlignment="Left" Grid.Row="8" Width="35" Source="Temperature.png" VerticalAlignment="Center" Margin="0" Visibility="Hidden"/>
+                            <TextBox x:Name="T2" Grid.ColumnSpan="3" Grid.Row="8" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy24" HorizontalAlignment="Left" Grid.Row="8" Width="35" Source="Temperature.png" VerticalAlignment="Center" Grid.Column="4" Margin="0" Visibility="Hidden"/>
+                            <TextBox x:Name="Tb2" Grid.ColumnSpan="3" Grid.Row="8" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy25" HorizontalAlignment="Left" Grid.Row="10" Width="35" Source="Pressure.png" VerticalAlignment="Center" Margin="0" Visibility="Hidden"/>
+                            <TextBox x:Name="P2" Grid.ColumnSpan="3" Grid.Row="10" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy26" HorizontalAlignment="Left" Grid.Row="10" Width="35" Source="Pressure.png" VerticalAlignment="Center" Grid.Column="4" Margin="0" Visibility="Hidden"/>
+                            <TextBox x:Name="Pb2" Grid.ColumnSpan="3" Grid.Row="10" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4" Visibility="Hidden"/>
+                            <Label x:Name="bgiinputbtn2" Content="Input value" Grid.Row="4" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" FontSize="14" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                        <GradientStop Color="#FFFE8E31" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="bgicalcbtn2" Content="Calculate value" Grid.Row="4" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" FontSize="14" Grid.Column="2" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF5F5F5F" Offset="0"/>
+                                        <GradientStop Color="#FF252424" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="bgainputbtn2" Content="Input value" Grid.Row="4" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" FontSize="14" Grid.Column="4" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                        <GradientStop Color="#FFFE8E31" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="bgacalcbtn2" Content="Calculate value" Grid.Row="4" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" FontSize="14" Grid.Column="6" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF5F5F5F" Offset="0"/>
+                                        <GradientStop Color="#FF252424" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Image x:Name="voldataimg_Copy18" HorizontalAlignment="Left" Grid.Row="6" Width="35" Source="Bg.png" VerticalAlignment="Center" Visibility="Hidden"/>
+                            <TextBox x:Name="bgiin2" Grid.ColumnSpan="3" Grid.Row="6" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Visibility="Hidden"/>
+                            <Image x:Name="voldataimg_Copy20" HorizontalAlignment="Left" Grid.Row="6" Width="35" Source="Bgi.png" VerticalAlignment="Center" Grid.Column="4" Visibility="Hidden"/>
+                            <TextBox x:Name="Bgain2" Grid.ColumnSpan="3" Grid.Row="6" TextWrapping="Wrap" Text="0" FontSize="16" VerticalContentAlignment="Center" BorderThickness="0,1,1,1" Margin="35,0,0,0" Background="WhiteSmoke" Grid.Column="4" Visibility="Hidden"/>
+                            <Label x:Name="zbgicalcbtn2" Content="Input Z" Grid.Row="6" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" Grid.Column="2" Width="60" HorizontalAlignment="Left" Visibility="Hidden" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF5F5F5F" Offset="0"/>
+                                        <GradientStop Color="#FF252424" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="ubgicalcbtn2" Content="Input ɣ" Grid.Row="6" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" Grid.Column="2" Width="60" HorizontalAlignment="Right" Visibility="Hidden" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                        <GradientStop Color="#FFFE8E31" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="zbgacalcbtn2" Content="Input Z" Grid.Row="6" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" Grid.Column="6" Width="60" HorizontalAlignment="Left" Visibility="Hidden" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF5F5F5F" Offset="0"/>
+                                        <GradientStop Color="#FF252424" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <Label x:Name="ubgacalcbtn2" Content="Input ɣ" Grid.Row="6" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White" Grid.Column="6" Width="60" HorizontalAlignment="Right" Visibility="Hidden" Cursor="Hand">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                        <GradientStop Color="#FFFE8E31" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                        </Grid>
+                        <Label x:Name="chart3btn" Content="Charts &amp; Table" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Width="126" Height="32" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF629FF7" Foreground="White" Cursor="Hand" Grid.Column="1" Grid.Row="2">
+                            <Label.Triggers>
+                                <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="chart3btn"
+													Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+													From="#FF629FF7"
+													To="#FF457CCD"
+													Duration="0:0:0.3"
+                                                                    />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="chart3btn"
+													Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+													From="#457CCD"
+													To="#FF629FF7"
+													Duration="0:0:0.3"
+                                                                    />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Label.Triggers>
+                        </Label>
+                    </Grid>
+                    <Grid x:Name="wowresults" Grid.Column="1" Margin="50,72,50,71" Width="300" Height="450" Background="#FF515151">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="7"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="7"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="7"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="7"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="7"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="7"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="7"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="7"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="7"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.Effect>
+                            <DropShadowEffect ShadowDepth="2" Opacity="0.5" BlurRadius="7"/>
+                        </Grid.Effect>
+                        <Label Content="Gas Initially in place, G" Grid.Column="1" Margin="0" Grid.Row="1" Grid.ColumnSpan="3" Background="#FF2E2E2E" Foreground="White" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
+                        <Label Content="Gas produced, Gp" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="3" Background="#FF2E2E2E" Foreground="White" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center"/>
+                        <Label x:Name="g_calc2" Content="00000000 SCF" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" Background="#FFFEC231" Foreground="#FF252424" FontSize="18" Margin="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0"/>
+                        <Label x:Name="gp_calc2" Content="00000000 SCF" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="3" Background="#FFFEC231" Foreground="#FF252424" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Padding="0"/>
+                        <Label Content="R.F. " Grid.Column="1" Grid.Row="7" Background="#FF2E2E2E" Foreground="White" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center" Margin="0" VerticalAlignment="Center" Height="35"/>
+                        <Label Content="Bg" Grid.Column="1" Grid.Row="9" Background="#FF2E2E2E" Foreground="White" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center" Margin="0" VerticalAlignment="Center" Height="35"/>
+                        <Label Content="Bgi" Grid.Column="1" Grid.Row="11" Background="#FF2E2E2E" Foreground="White" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center" Margin="0" VerticalAlignment="Center" Height="35"/>
+                        <Label x:Name="rf_calc2" Content="0%" Grid.Column="3" Grid.Row="7" Background="#FFFEC231" Foreground="#FF252424" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center" Margin="0" VerticalAlignment="Center" Height="35"/>
+                        <Label x:Name="bgi_calc2" Content="0 cuft/scf" Grid.Column="3" Grid.Row="9" Background="#FFFEC231" Foreground="#FF252424" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center" Margin="0" VerticalAlignment="Center" Height="34"/>
+                        <Label x:Name="bga_calc2" Content="0 cuft/scf" Grid.Column="3" Grid.Row="11" Background="#FFFEC231" Foreground="#FF252424" FontSize="14" Padding="10,0,0,0" VerticalContentAlignment="Center" Margin="0" VerticalAlignment="Center" Height="34"/>
+                    </Grid>
+                </Grid>
+                <Grid x:Name="wowgridcharts" Margin="0" Visibility="Hidden">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="500"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid x:Name="chartholder3" Margin="0">
+                        <d3:ChartPlotter x:Name="myChartPlotter4" Background="WhiteSmoke" BorderBrush="#FFB9B9B9">
+                            <d3:Header Content="P/z vs Gas produced"/>
+                            <d3:VerticalAxisTitle Content="P/z"/>
+                            <d3:HorizontalAxisTitle Content="Gas produced, Gp (SCF)"/>
+                            <d3:CursorCoordinateGraph x:Name="CursorGraph4"/>
+                            <d3:AxisCursorGraph/>
+                        </d3:ChartPlotter>
+                    </Grid>
+                    <Grid x:Name="table3wrap" Margin="0" Background="White" Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="44"/>
+                        </Grid.RowDefinitions>
+                        <DataGrid x:Name="wowtable" Margin="0" AutoGenerateColumns="False" RowHeight="35">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn x:Name="colpressure2" Binding="{x:Null}" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="Pressure, P" Width="*">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="Foreground" Value="#FF252424"/>
+                                            <Setter Property="Height" Value="40"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                            <Setter Property="Padding" Value="5,0,0,0"/>
+                                            <Setter Property="BorderThickness" Value="1,0"/>
+                                            <Setter Property="BorderBrush" Value="#FF959595"/>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                                        <GradientStop Color="#FFFE8231" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn x:Name="colcompress2" Binding="{x:Null}" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="z" Width="*">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="Foreground" Value="#FF252424"/>
+                                            <Setter Property="Height" Value="40"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                            <Setter Property="Padding" Value="5,0,0,0"/>
+                                            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                            <Setter Property="BorderBrush" Value="#FF959595"/>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                                        <GradientStop Color="#FFFE8231" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn x:Name="colpoverz2" Binding="{x:Null}" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="P/z" Width="*">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="Foreground" Value="#FF252424"/>
+                                            <Setter Property="Height" Value="40"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                            <Setter Property="Padding" Value="5,0,0,0"/>
+                                            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                            <Setter Property="BorderBrush" Value="#FF959595"/>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                                        <GradientStop Color="#FFFE8231" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn x:Name="colgprod2" Binding="{x:Null}" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="Gp" Width="*">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="Foreground" Value="#FF252424"/>
+                                            <Setter Property="Height" Value="40"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                            <Setter Property="Padding" Value="5,0,0,0"/>
+                                            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                            <Setter Property="BorderBrush" Value="#FF959595"/>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                                        <GradientStop Color="#FFFE8231" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn x:Name="colrecovery2" Binding="{x:Null}" CanUserResize="False" ClipboardContentBinding="{x:Null}" Header="Recovery factor" Width="*">
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="Foreground" Value="#FF252424"/>
+                                            <Setter Property="Height" Value="40"/>
+                                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                                            <Setter Property="Padding" Value="5,0,0,0"/>
+                                            <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                            <Setter Property="BorderBrush" Value="#FF959595"/>
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FFFEC231" Offset="0"/>
+                                                        <GradientStop Color="#FFFE8231" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Label x:Name="datainbtn2" Content="Data input" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Width="126" Height="32" FontFamily="Segoe WP Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Background="#FF629FF7" Foreground="White" Cursor="Hand" Grid.Row="1">
+                            <Label.Triggers>
+                                <EventTrigger RoutedEvent="UIElement.MouseEnter">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="datainbtn2"
+													Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+													From="#FF629FF7"
+													To="#FF457CCD"
+													Duration="0:0:0.3"
+                                                                    />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                                <EventTrigger RoutedEvent="UIElement.MouseLeave">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="datainbtn2"
+													Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)"
+													From="#457CCD"
+													To="#FF629FF7"
+													Duration="0:0:0.3"
+                                                                    />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Label.Triggers>
+                        </Label>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+
+    </Grid>
+</Window>
